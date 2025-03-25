@@ -45,7 +45,7 @@ router
   .post(verifyJWT, upload.single("avatar"), updateUserAvatar);
 router
   .route("/cover-image")
-  .post(verifyJWT, upload.single("/coverImage"), updateUserCoverImage);
+  .post(verifyJWT, upload.single("coverImage"), updateUserCoverImage);
 router.route("/c/:username").get(verifyJWT, getUserChanelProfile);
 router.route("/history").get(verifyJWT, getWatchHistory);
 export default router;
