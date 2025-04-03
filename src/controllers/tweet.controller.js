@@ -9,11 +9,9 @@ const createTweet = asyncHandler(async (req, res) => {
   const { content } = req.body;
 
   if (!content) {
-    throw new ApiError(400,"Content is required" );
+    throw new ApiError(400, "Content is required");
   }
 
-  
- 
   const tweet = await Tweet.create({
     owner: req.user._id,
     content,
@@ -29,71 +27,74 @@ const createTweet = asyncHandler(async (req, res) => {
   return res
     .status(200)
     .json(new ApiResponse(200, "Tweet Created Successfully", tweet));
-  //TODO: create tweet
 });
 
 const getUserTweets = asyncHandler(async (req, res) => {
-    const {userId} = req.params;
-    if(!userId){
-        throw new ApiError (400,"UserId is required");
-    }
+  const { userId } = req.params;
+  if (!userId) {
+    throw new ApiError(400, "UserId is required");
+  }
 
-    const tweets = await Tweet.find({owner:userId});
+  const tweets = await Tweet.find({ owner: userId });
 
-    if(!tweets){
-      throw new ApiError(500,"There is something error while fetching the tweets from the database");
-    }
-    const tweet_content = tweets.map((tweet)=>tweet.content);
-    console.log("tweets =>",tweet_content);
+  if (!tweets) {
+    throw new ApiError(
+      500,
+      "There is something error while fetching the tweets from the database"
+    );
+  }
+  const tweet_content = tweets.map((tweet) => tweet.content);
+  console.log("tweets =>", tweet_content);
 
-    return res
+  return res
     .status(200)
-    .json(new ApiResponse(200,"tweets fetched successfully",tweet_content));
-
-  // TODO: get user tweets
+    .json(new ApiResponse(200, "tweets fetched successfully", tweet_content));
 });
 
 const updateTweet = asyncHandler(async (req, res) => {
-    const {tweetId} = req.params;
-    const {content} = req.body;
-    if(!tweetId){
-        throw new ApiError (400,"TweetId is required");
-    }
-    if(!content){
-        throw new ApiError (400,"Content is required",);
-    }
+  const { tweetId } = req.params;
+  const { content } = req.body;
+  if (!tweetId) {
+    throw new ApiError(400, "TweetId is required");
+  }
+  if (!content) {
+    throw new ApiError(400, "Content is required");
+  }
 
-    const tweet = await Tweet.findByIdAndUpdate(
-        tweetId,
-        {content},
-        {new:true}
+  const tweet = await Tweet.findByIdAndUpdate(
+    tweetId,
+    { content },
+    { new: true }
+  );
+
+  if (!tweet) {
+    throw new ApiError(
+      500,
+      "There is something error while updating the tweet "
     );
+  }
 
-    if(!tweet){
-        throw new ApiError (500,"There is something error while updating the tweet ");
-    }
-
-    return res
+  return res
     .status(200)
-    .json(new ApiResponse(200,"Tweet Updated Succcessfylly",tweet));
-  //TODO: update tweet
+    .json(new ApiResponse(200, "Tweet Updated Succcessfylly", tweet));
 });
 
 const deleteTweet = asyncHandler(async (req, res) => {
+  const { tweetId } = req.params;
+  if (!tweetId) {
+    throw new ApiError(400, "TweetId is required");
+  }
 
-    const {tweetId} = req.params;
-    if(!tweetId){
-        throw new ApiError (400,"TweetId is required");
-    }
-
-    const tweet = await Tweet.findByIdAndDelete(tweetId);
-    if(!tweet){
-        throw new ApiError (500,"There is something error while deleting the tweet ");
-    }
-    return res.
-    status(200)
-    .json(new ApiResponse(200,"Tweet Deleted Successfully",tweet));
-  //TODO: delete tweet
+  const tweet = await Tweet.findByIdAndDelete(tweetId);
+  if (!tweet) {
+    throw new ApiError(
+      500,
+      "There is something error while deleting the tweet "
+    );
+  }
+  return res
+    .status(200)
+    .json(new ApiResponse(200, "Tweet Deleted Successfully"));
 });
 
 export { createTweet, getUserTweets, updateTweet, deleteTweet };

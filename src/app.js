@@ -18,9 +18,13 @@ app.use(express.static('public'));
 // Import Routes
 import userRoute from "./routes/user.routes.js"
 import tweetRoute from "./routes/tweet.routes.js"
+import likeRoute from "./routes/like.routes.js"
+import commentRoute from "./routes/comment.routes.js"
 
 // Routes declaration 
 app.use('/api/v1/users',userRoute)
 app.use('/api/v1/tweets',tweetRoute)
+app.use('/api/v1/like',likeRoute)
+app.use('/api/v1/comment',commentRoute)
 
 export default app;
