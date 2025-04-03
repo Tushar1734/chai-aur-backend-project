@@ -9,7 +9,7 @@ const createTweet = asyncHandler(async (req, res) => {
   const { content } = req.body;
 
   if (!content) {
-    throw new ApiError("Content is required", 400);
+    throw new ApiError(400,"Content is required" );
   }
 
   
@@ -35,8 +35,21 @@ const createTweet = asyncHandler(async (req, res) => {
 const getUserTweets = asyncHandler(async (req, res) => {
     const {userId} = req.params;
     if(!userId){
-        throw new ApiError ("UserId is required",400);
+        throw new ApiError (400,"UserId is required");
     }
+
+    const tweets = await Tweet.find({owner:userId});
+
+    if(!tweets){
+      throw new ApiError(500,"There is something error while fetching the tweets from the database");
+    }
+    const tweet_content = tweets.map((tweet)=>tweet.content);
+    console.log("tweets =>",tweet_content);
+
+    return res
+    .status(200)
+    .json(new ApiResponse(200,"tweets fetched successfully",tweet_content));
+
   // TODO: get user tweets
 });
 
@@ -44,10 +57,10 @@ const updateTweet = asyncHandler(async (req, res) => {
     const {tweetId} = req.params;
     const {content} = req.body;
     if(!tweetId){
-        throw new ApiError ("TweetId is required",400);
+        throw new ApiError (400,"TweetId is required");
     }
     if(!content){
-        throw new ApiError ("Content is required",400);
+        throw new ApiError (400,"Content is required",);
     }
 
     const tweet = await Tweet.findByIdAndUpdate(
@@ -57,7 +70,7 @@ const updateTweet = asyncHandler(async (req, res) => {
     );
 
     if(!tweet){
-        throw new ApiError ("There is something error while updating the tweet ",500);
+        throw new ApiError (500,"There is something error while updating the tweet ");
     }
 
     return res
@@ -70,12 +83,12 @@ const deleteTweet = asyncHandler(async (req, res) => {
 
     const {tweetId} = req.params;
     if(!tweetId){
-        throw new ApiError ("TweetId is required",400);
+        throw new ApiError (400,"TweetId is required");
     }
 
     const tweet = await Tweet.findByIdAndDelete(tweetId);
     if(!tweet){
-        throw new ApiError ("There is something error while deleting the tweet ",500);
+        throw new ApiError (500,"There is something error while deleting the tweet ");
     }
     return res.
     status(200)
