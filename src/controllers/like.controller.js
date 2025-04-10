@@ -30,8 +30,6 @@ const toggleVideoLike = asyncHandler(async (req, res) => {
       .status(200)
       .json(new ApiResponse(200, "video unliked sucessfully.."));
   }
-
-  //TODO: toggle like on video
 });
 
 const toggleCommentLike = asyncHandler(async (req, res) => {
@@ -67,7 +65,6 @@ const toggleCommentLike = asyncHandler(async (req, res) => {
       .status(200)
       .json(new ApiResponse(200, "comment unliked sucessfully.."));
   }
-  //TODO: toggle like on comment
 });
 
 const toggleTweetLike = asyncHandler(async (req, res) => {
@@ -77,7 +74,7 @@ const toggleTweetLike = asyncHandler(async (req, res) => {
 
   if (!isLiked) {
     const result = await Like.create({ likedBy: req.user._id, tweet: tweetId });
-     console.log("video =>",result.video)
+    console.log("video =>", result.video);
     if (!result) {
       throw new ApiError(400, "Something went wrong while Like the tweet ");
     }
@@ -99,21 +96,26 @@ const toggleTweetLike = asyncHandler(async (req, res) => {
       .json(new ApiResponse(200, "tweet unliked sucessfully.."));
   }
 
-  //TODO: toggle like on tweet
 });
 
 const getLikedVideos = asyncHandler(async (req, res) => {
-  const likedVideos = await Like.find({video:{$ne:undefined},likedBy:req.user._id})
- 
-    if(!likedVideos){
-        throw new ApiError(400,"there is no videos are there which are liked by you ")
-    }
+  const likedVideos = await Like.find({
+    video: { $ne: undefined },
+    likedBy: req.user._id,
+  });
+
+  if (!likedVideos) {
+    throw new ApiError(
+      400,
+      "there is no videos are there which are liked by you "
+    );
+  }
 
   return res
-  .status(200)
-  .json(new ApiResponse(200,"success like tweet",likedVideos));
+    .status(200)
+    .json(new ApiResponse(200, "success like tweet", likedVideos));
 
-  //TODO: get all liked videos
+  
 });
 
 export { toggleCommentLike, toggleTweetLike, toggleVideoLike, getLikedVideos };

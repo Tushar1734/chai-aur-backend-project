@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { isValidObjectId } from "mongoose";
 import { Comment } from "../models/comment.model.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
@@ -8,10 +8,18 @@ const getVideoComments = asyncHandler(async (req, res) => {
  
   const { videoId } = req.params;
 
+  if(!isValidObjectId(videoId)){
+    throw new ApiError(400,"Invalid video id ");
+  }
+
   const { page = 1, limit = 10 } = req.query;
 
-  const comments = await Comment.find({ video: videoId });
-
+  let pageNum = parseInt(page);
+  let limitNum = parseInt(limit);
+  const comments = await Comment
+  .find({ video: videoId })
+  .limit(limitNum)
+  .skip((pageNum-1)*limitNum);
   console.log("comments =>",comments);
 
   if(!comments){

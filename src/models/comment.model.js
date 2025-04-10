@@ -6,7 +6,7 @@ const commentSchema= new Schema({
         type: Schema.Types.ObjectId,
         ref:"User"
     },
-    content :{
+    content:{
         type:String,
         required:true,
         trim:true
@@ -15,8 +15,6 @@ const commentSchema= new Schema({
         type:Schema.Types.ObjectId,
         ref:"Video"
     },
-
-
 
 
 },{timestapes:true})
