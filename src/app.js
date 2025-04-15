@@ -22,6 +22,7 @@ import likeRoute from "./routes/like.routes.js"
 import commentRoute from "./routes/comment.routes.js"
 import videoRoute from "./routes/video.routes.js"
 import playListRoute from "./routes/playlist.routes.js"
+import subscribtionRoute from "./routes/subscription.routes.js"
 
 // Routes declaration 
 app.use('/api/v1/users',userRoute)
@@ -30,4 +31,5 @@ app.use('/api/v1/like',likeRoute)
 app.use('/api/v1/comment',commentRoute)
 app.use('/api/v1/video',videoRoute)
 app.use('/api/v1/playlist',playListRoute)
+app.use('/api/v1/subscribtion',subscribtionRoute)
 export default app;
