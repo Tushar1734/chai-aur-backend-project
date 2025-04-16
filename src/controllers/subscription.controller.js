@@ -40,12 +40,12 @@ const toggleSubscription = asyncHandler(async (req, res) => {
 
 // controller to return subscriber list of a channel
 const getUserChannelSubscribers = asyncHandler(async (req, res) => {
-    const {subscriberId} = req.params
+    const {channelId} = req.params
 
-    if(!isValidObjectId(subscriberId)){
+    if(!isValidObjectId(channelId)){
         throw new ApiError(400,"Channel id is invalid please enter valid channel id ");
     }
-    let subscribers = await Subscription.find({channel:subscriberId});
+    let subscribers = await Subscription.find({channel:channelId,subscriber:{$ne:undefined}});
 
     if(!subscribers){
         throw new ApiError(500,"There is something error while fetching the subscriber of the channel ");
@@ -59,15 +59,15 @@ const getUserChannelSubscribers = asyncHandler(async (req, res) => {
 
 // controller to return channel list to which user has subscribed
 const getSubscribedChannels = asyncHandler(async (req, res) => {
-    console.log(req.params)
-    const subscriberId  = req.params.channelId
+    
+    const {subscriberId} = req.params
     
     
      if(!isValidObjectId(subscriberId)){
         throw new ApiError(400,"Channel id is invalid please enter valid channel id ");
     }
     let channels = await Subscription.find({subscriber:subscriberId,channel:{$ne:undefined}});
-    console.log("channels",channels)
+   
     if(!channels){
         throw new ApiError(500,"There is something error while fetching the Subscribed channels  ");
 
